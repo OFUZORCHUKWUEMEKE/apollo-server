@@ -11,18 +11,19 @@ module.exports ={
                 throw new Error(error) 
             }
         },
-        getPost:async(_,{postId})=>{
+        async getPost(_, { postId }) {
             try {
-                const post = Post.find(postId)
-                if(post){
-                    return post
-                }else{
-                    throw new Error('Post not Found')
-                }
-            } catch (error) {
-                    throw new Error(error)
+              const post = await Post.findById(postId);
+              if (post) {
+                return post;
+              } else {
+                throw new Error('Post not found');
+              }
+            } catch (err) {
+              throw new Error(err);
             }
-        }
+          }
+
     },
     Mutation:{
         createPost :async(_,{body},context)=>{
@@ -43,8 +44,8 @@ module.exports ={
             const user = checkAUth(context)
             try {
                 const post = await Post.findById(postId)
-                if(user.username===post.username){
-                    console.log(post.username)
+               
+                if(user.username===post.username){           
                     await post.delete()
                     return 'Post deleted Successfully'
                 }else{
